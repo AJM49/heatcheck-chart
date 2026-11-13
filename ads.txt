@@ -1,0 +1,2 @@
+# ads.txt — Heat Check. Authorized sellers:
+google.com, pub-8355879477002897, DIRECT, f08c47fec0942fa0

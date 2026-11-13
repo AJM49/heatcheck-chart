@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Heat Check — The Momentum Chart · Week 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #160a12;
+    --bg2: #1e0e18;
+    --card: #241020;
+    --line: #3a1a30;
+    --magenta: #ff2d78;
+    --magenta-soft: #ff5c9e;
+    --gold: #ffc700;
+    --gold-soft: #ffd94d;
+    --text: #f7eef3;
+    --muted: #b99db0;
+    --muted2: #8a6d81;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--magenta-soft); }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 20px 60px; }
+  header.hero {
+    text-align: center;
+    padding: 44px 16px 8px;
+    background: radial-gradient(ellipse 70% 90% at 50% 0%, #3d0f2a 0%, var(--bg) 70%);
+  }
+  .flame { font-size: 40px; }
+  h1.logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(64px, 13vw, 132px);
+    letter-spacing: 4px;
+    line-height: .9;
+    margin-top: 6px;
+  }
+  h1.logo .h { color: var(--magenta); }
+  h1.logo .c { color: var(--gold); }
+  .tagline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(20px, 4vw, 30px);
+    letter-spacing: 6px;
+    color: var(--gold);
+    margin-top: 6px;
+  }
+  .subline { color: var(--muted); margin-top: 10px; font-size: 15px; }
+  .week-pill {
+    display: inline-block; margin-top: 16px;
+    border: 1px solid var(--magenta); color: var(--magenta-soft);
+    border-radius: 999px; padding: 5px 16px; font-size: 13px; font-weight: 600;
+    letter-spacing: 1px;
+  }
+  .spotlights {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 28px 0 8px;
+  }
+  @media (max-width: 700px) { .spotlights { grid-template-columns: 1fr; } }
+  .spot {
+    background: linear-gradient(135deg, #2c1124, #1a0a15);
+    border: 1px solid var(--line);
+    border-left: 5px solid var(--gold);
+    border-radius: 12px; padding: 20px 22px;
+  }
+  .spot .label {
+    font-family: 'Bebas Neue', sans-serif; letter-spacing: 3px;
+    color: var(--gold); font-size: 19px;
+  }
+  .spot .big { font-size: 22px; font-weight: 800; margin-top: 6px; }
+  .spot .small { color: var(--muted); font-size: 13.5px; margin-top: 4px; }
+  .chart-head {
+    display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+    margin: 38px 0 12px;
+  }
+  .chart-head h2 {
+    font-family: 'Bebas Neue', sans-serif; font-size: 44px; letter-spacing: 2px; line-height: 1;
+  }
+  .chart-head h2 .accent { color: var(--magenta); }
+  .chart-head .src { color: var(--muted); font-size: 13.5px; }
+  .table-wrap {
+    overflow-x: auto; border: 1px solid var(--line); border-radius: 12px;
+    background: var(--bg2);
+  }
+  table { width: 100%; border-collapse: collapse; min-width: 880px; font-size: 14px; }
+  thead th {
+    text-align: left; font-size: 11.5px; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--muted); padding: 12px 12px; border-bottom: 2px solid var(--magenta);
+    background: #241020; white-space: nowrap;
+  }
+  tbody td { padding: 11px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tbody tr:hover { background: #2a1224; }
+  td.rank {
+    font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: var(--gold);
+    width: 54px; line-height: 1.1;
+  }
+  td.artist { font-weight: 700; font-size: 15px; min-width: 170px; }
+  .song { display: block; font-weight: 400; color: var(--muted); font-size: 12.5px; margin-top: 2px; }
+  .badge-new {
+    display: inline-block; background: var(--magenta); color: #fff;
+    font-size: 11px; font-weight: 800; letter-spacing: 1px;
+    padding: 3px 8px; border-radius: 5px;
+  }
+  .num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.heat { color: var(--muted); font-size: 16px; text-align: center; }
+  .unk { color: var(--muted2); font-style: italic; font-size: 13px; }
+  td.note { color: var(--muted); font-size: 12.5px; min-width: 200px; }
+  section.explainer {
+    margin-top: 44px; background: var(--card); border: 1px solid var(--line);
+    border-radius: 12px; padding: 26px 26px 22px;
+  }
+  section.explainer h2 {
+    font-family: 'Bebas Neue', sans-serif; font-size: 34px; letter-spacing: 2px;
+    color: var(--gold);
+  }
+  section.explainer h3 { margin-top: 18px; font-size: 16px; }
+  section.explainer p, section.explainer li { color: #e8d9e2; font-size: 14.5px; }
+  section.explainer ul { margin: 10px 0 0 20px; }
+  section.explainer li { margin-bottom: 8px; }
+  .formula {
+    background: #1a0a15; border: 1px dashed var(--magenta);
+    border-radius: 8px; padding: 14px 16px; margin-top: 14px;
+    font-size: 14px; line-height: 1.7;
+  }
+  .formula b { color: var(--gold); }
+  section.method {
+    margin-top: 20px; color: var(--muted); font-size: 13.5px; line-height: 1.7;
+  }
+  section.method h2 {
+    font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 2px; color: var(--text);
+  }
+  footer { margin-top: 34px; text-align: center; color: var(--muted2); font-size: 12.5px; }
+
+  .badge-up { display: inline-block; background: #14532d; color: #4ade80; font-size: 11px; font-weight: 800; letter-spacing: .5px; padding: 3px 8px; border-radius: 5px; }
+  .badge-down { display: inline-block; background: #4c0519; color: #fb7185; font-size: 11px; font-weight: 800; letter-spacing: .5px; padding: 3px 8px; border-radius: 5px; }
+  .badge-flat { display: inline-block; color: var(--muted); font-size: 12px; font-weight: 700; padding: 3px 8px; }
+  td.heat b { color: var(--gold); font-size: 17px; }
+  .fc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 14px; }
+  @media (max-width: 700px) { .fc-grid { grid-template-columns: 1fr; } }
+  .fc-col h3 { color: var(--magenta); letter-spacing: 1px; font-size: 14px; margin-bottom: 8px; }
+  .fc-pick { display: flex; justify-content: space-between; align-items: baseline; padding: 8px 0; border-bottom: 1px solid var(--line); }
+  .fc-pick .who b { font-size: 15.5px; }
+  .fc-pick .who span { display: block; color: var(--muted); font-size: 12.5px; margin-top: 2px; max-width: 300px; }
+  .fc-pick .prob { font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: var(--gold); white-space: nowrap; padding-left: 12px; }
+  /* Ad slots: invisible until an ad code is pasted inside the .ad-slot div. */
+  .ad-slot { display: block; margin: 28px auto; text-align: center; }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="flame">🔥</div>
+  <h1 class="logo"><span class="h">HEAT</span> <span class="c">CHECK</span></h1>
+  <div class="tagline">THE MOMENTUM CHART</div>
+  <p class="subline">Billboard ranks who&rsquo;s biggest. Heat Check ranks who&rsquo;s moving fastest.</p>
+  <div class="week-pill">WEEK 2 &nbsp;·&nbsp; DATA AS OF NOV 13, 2026</div>
+</header>
+
+  <!-- AD SLOT 1 — leaderboard, below hero. Paste AdSense ad-unit code inside the div after approval. -->
+  <div class="ad-slot"></div>
+  <!-- END AD SLOT 1 -->
+
+<div class="wrap">
+  <div class="spotlights">
+    <div class="spot">
+      <div class="label">👑 BIGGEST MOVER — HIP-HOP</div>
+      <div class="big">Jhené Aiko</div>
+      <div class="small">Heat Index <b>67.2</b> — &ldquo;So Good&rdquo; climbs 13 &rarr; 9 with a maxed-out momentum score.</div>
+    </div>
+    <div class="spot">
+      <div class="label">👑 BIGGEST MOVER — K-POP</div>
+      <div class="big">ILLIT</div>
+      <div class="small">Heat Index <b>88.0</b> — &ldquo;You&rsquo;re Under Arrest&rdquo; rockets 22 &rarr; 3 (+19), the biggest jump on either chart.</div>
+    </div>
+  </div>
+
+  <div class="chart-head">
+    <h2>HIP-HOP <span class="accent">TOP 25</span></h2>
+    <span class="src">Source: Billboard Hot 100 (official playlist) — hip-hop, R&amp;B &amp; Afrobeats acts, in playlist order. Movement vs. Week 1 (Oct 14).</span>
+  </div>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Rank</th><th>Artist</th><th>Movement</th><th>Peak</th><th>Weeks</th><th>Heat Index</th><th>Spotify Followers</th><th>Instagram Followers</th><th>Source / Notes</th></tr></thead>
+    <tbody>
+<tr><td class="rank">1</td><td class="artist">Dominic Fike<span class="song">Babydoll</span></td><td><span class="badge-up">▲ 2</span></td><td class="num">1</td><td class="num">2</td><td class="heat"><b>60.4</b></td><td><span class="unk">unknown</span></td><td><span class="num">3,219,709</span></td><td class="note">Hot 100 playlist #13</td></tr>
+<tr><td class="rank">2</td><td class="artist">Bruno Mars<span class="song">I Just Might</span></td><td><span class="badge-flat">—</span></td><td class="num">2</td><td class="num">2</td><td class="heat"><b>38.4</b></td><td><span class="unk">unknown</span></td><td><span class="num">43,812,812</span></td><td class="note">Hot 100 playlist #14</td></tr>
+<tr><td class="rank">3</td><td class="artist">Michael Jackson<span class="song">Thriller</span></td><td><span class="badge-new">NEW</span></td><td class="num">3</td><td class="num">1</td><td class="heat"><b>36.8</b></td><td><span class="unk">unknown</span></td><td><span class="num">17,145,084</span></td><td class="note">Hot 100 playlist #20 · Halloween catalog surge</td></tr>
+<tr><td class="rank">4</td><td class="artist">Malcolm Todd<span class="song">Earrings</span></td><td><span class="badge-up">▲ 1</span></td><td class="num">4</td><td class="num">2</td><td class="heat"><b>63.2</b></td><td><span class="unk">unknown</span></td><td><span class="num">1,761,068</span></td><td class="note">Hot 100 playlist #21</td></tr>
+<tr><td class="rank">5</td><td class="artist">Drake<span class="song">Janice STFU</span></td><td><span class="badge-down">▼ 1</span></td><td class="num">4</td><td class="num">2</td><td class="heat"><b>33.6</b></td><td><span class="unk">unknown</span></td><td><span class="num">139,853,952</span></td><td class="note">Hot 100 playlist #25</td></tr>
+<tr><td class="rank">6</td><td class="artist">Teddy Swims<span class="song">Mr. Know It All</span></td><td><span class="badge-up">▲ 2</span></td><td class="num">6</td><td class="num">2</td><td class="heat"><b>56.6</b></td><td><span class="unk">unknown</span></td><td><span class="num">9,241,735</span></td><td class="note">Hot 100 playlist #26</td></tr>
+<tr><td class="rank">7</td><td class="artist">Lil Baby<span class="song">Dead Fresh</span></td><td><span class="badge-down">▼ 1</span></td><td class="num">6</td><td class="num">2</td><td class="heat"><b>31.2</b></td><td><span class="unk">unknown</span></td><td><span class="num">22,884,964</span></td><td class="note">Hot 100 playlist #32</td></tr>
+<tr><td class="rank">8</td><td class="artist">Don Toliver<span class="song">Solar Eclipse (with Drake)</span></td><td><span class="badge-down">▼ 7</span></td><td class="num">1</td><td class="num">2</td><td class="heat"><b>33.6</b></td><td><span class="unk">unknown</span></td><td><span class="num">6,064,357</span></td><td class="note">Hot 100 playlist #35</td></tr>
+<tr><td class="rank">9</td><td class="artist">Jhené Aiko<span class="song">So Good (feat. Kendrick Lamar)</span></td><td><span class="badge-up">▲ 4</span></td><td class="num">9</td><td class="num">2</td><td class="heat"><b>67.2</b></td><td><span class="unk">unknown</span></td><td><span class="num">16,818,449</span></td><td class="note">Hot 100 playlist #38</td></tr>
+<tr><td class="rank">10</td><td class="artist">Kendrick Lamar<span class="song">So Good (featured)</span></td><td><span class="badge-up">▲ 4</span></td><td class="num">10</td><td class="num">2</td><td class="heat"><b>65.6</b></td><td><span class="unk">unknown</span></td><td><span class="num">18,554,142</span></td><td class="note">Hot 100 playlist #38</td></tr>
+<tr><td class="rank">11</td><td class="artist">Rockwell<span class="song">Somebody&#x27;s Watching Me</span></td><td><span class="badge-new">NEW</span></td><td class="num">11</td><td class="num">1</td><td class="heat"><b>24.0</b></td><td><span class="unk">unknown</span></td><td><span class="unk">unknown</span></td><td class="note">Hot 100 playlist #39 · Halloween catalog surge</td></tr>
+<tr><td class="rank">12</td><td class="artist">SIENNA SPIRO<span class="song">Great Expectation</span></td><td><span class="badge-new">NEW</span></td><td class="num">12</td><td class="num">1</td><td class="heat"><b>22.4</b></td><td><span class="unk">unknown</span></td><td><span class="num">2,490,740</span></td><td class="note">Hot 100 playlist #40</td></tr>
+<tr><td class="rank">13</td><td class="artist">Steve Lacy<span class="song">oh yeah?</span></td><td><span class="badge-down">▼ 4</span></td><td class="num">9</td><td class="num">2</td><td class="heat"><b>38.0</b></td><td><span class="unk">unknown</span></td><td><span class="num">4,034,899</span></td><td class="note">Hot 100 playlist #44</td></tr>
+<tr><td class="rank">14</td><td class="artist">Belly Gang Kushington<span class="song">WTF GOIN (feat. 21 Savage)</span></td><td><span class="badge-up">▲ 2</span></td><td class="num">14</td><td class="num">2</td><td class="heat"><b>50.6</b></td><td><span class="unk">unknown</span></td><td><span class="num">770,680</span></td><td class="note">Hot 100 playlist #45</td></tr>
+<tr><td class="rank">15</td><td class="artist">21 Savage<span class="song">WTF GOIN (featured)</span></td><td><span class="badge-up">▲ 2</span></td><td class="num">15</td><td class="num">2</td><td class="heat"><b>37.6</b></td><td><span class="unk">unknown</span></td><td><span class="num">19,330,064</span></td><td class="note">Hot 100 playlist #45</td></tr>
+<tr><td class="rank">16</td><td class="artist">Cardi B<span class="song">AH HA</span></td><td><span class="badge-down">▼ 4</span></td><td class="num">12</td><td class="num">2</td><td class="heat"><b>16.0</b></td><td><span class="unk">unknown</span></td><td><span class="num">160,744,680</span></td><td class="note">Hot 100 playlist #54</td></tr>
+<tr><td class="rank">17</td><td class="artist">Megan Thee Stallion<span class="song">Thin Ice</span></td><td><span class="badge-up">▲ 4</span></td><td class="num">17</td><td class="num">2</td><td class="heat"><b>56.8</b></td><td><span class="unk">unknown</span></td><td><span class="num">32,753,250</span></td><td class="note">Hot 100 playlist #68</td></tr>
+<tr><td class="rank">18</td><td class="artist">Dolly Babe<span class="song">Pink Blush (Remix) (feat. Megan Thee Stallion)</span></td><td><span class="badge-up">▲ 2</span></td><td class="num">18</td><td class="num">2</td><td class="heat"><b>32.8</b></td><td><span class="unk">unknown</span></td><td><span class="unk">unknown</span></td><td class="note">Hot 100 playlist #69</td></tr>
+<tr><td class="rank">19</td><td class="artist">BabyChiefDoit<span class="song">Ghetto Love Story</span></td><td><span class="badge-up">▲ 4</span></td><td class="num">19</td><td class="num">2</td><td class="heat"><b>51.2</b></td><td><span class="unk">unknown</span></td><td><span class="num">1,003,740</span></td><td class="note">Hot 100 playlist #71</td></tr>
+<tr><td class="rank">20</td><td class="artist">Burna Boy<span class="song">Dai Dai (featured, with Shakira)</span></td><td><span class="badge-down">▼ 5</span></td><td class="num">15</td><td class="num">2</td><td class="heat"><b>9.6</b></td><td><span class="unk">unknown</span></td><td><span class="num">18,234,833</span></td><td class="note">Hot 100 playlist #74</td></tr>
+<tr><td class="rank">21</td><td class="artist">comehelpglo<span class="song">onsra</span></td><td><span class="badge-up">▲ 1</span></td><td class="num">21</td><td class="num">2</td><td class="heat"><b>18.0</b></td><td><span class="unk">unknown</span></td><td><span class="unk">unknown</span></td><td class="note">Hot 100 playlist #80</td></tr>
+<tr><td class="rank">22</td><td class="artist">Beyoncé<span class="song">MORNING DEW (DONK)</span></td><td><span class="badge-down">▼ 3</span></td><td class="num">19</td><td class="num">2</td><td class="heat"><b>6.4</b></td><td><span class="unk">unknown</span></td><td><span class="num">298,335,895</span></td><td class="note">Hot 100 playlist #81</td></tr>
+<tr><td class="rank">23</td><td class="artist">SZA<span class="song">Flower In A Hurricane (featured)</span></td><td><span class="badge-new">NEW</span></td><td class="num">23</td><td class="num">1</td><td class="heat"><b>4.8</b></td><td><span class="unk">unknown</span></td><td><span class="num">23,001,302</span></td><td class="note">Hot 100 playlist #85 · GTA VI score</td></tr>
+<tr><td class="rank">24</td><td class="artist">Thekidszn<span class="song">IMPULSIVE</span></td><td><span class="badge-new">NEW</span></td><td class="num">24</td><td class="num">1</td><td class="heat"><b>3.2</b></td><td><span class="unk">unknown</span></td><td><span class="num">144,204</span></td><td class="note">Hot 100 playlist #90</td></tr>
+<tr><td class="rank">25</td><td class="artist">Loe Shimmy<span class="song">I&#x27;m Spent (featured, with Drake)</span></td><td><span class="badge-flat">—</span></td><td class="num">25</td><td class="num">2</td><td class="heat"><b>17.7</b></td><td><span class="unk">unknown</span></td><td><span class="num">667,600</span></td><td class="note">Hot 100 playlist #91</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <!-- AD SLOT 2 — between the Hip-Hop and K-Pop charts. Paste AdSense ad-unit code inside the div after approval. -->
+  <div class="ad-slot"></div>
+  <!-- END AD SLOT 2 -->
+
+  <div class="chart-head">
+    <h2>K-POP <span class="accent">TOP 25</span></h2>
+    <span class="src">Source: Spotify Top 50 — South Korea, Korean acts in chart order, one entry per artist.</span>
+  </div>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Rank</th><th>Artist</th><th>Movement</th><th>Peak</th><th>Weeks</th><th>Heat Index</th><th>Spotify Followers</th><th>Instagram Followers</th><th>Source / Notes</th></tr></thead>
+    <tbody>
+<tr><td class="rank">1</td><td class="artist">A2O<span class="song">NEON</span></td><td><span class="badge-up">▲ 11</span></td><td class="num">1</td><td class="num">2</td><td class="heat"><b>80.0</b></td><td><span class="unk">unknown</span></td><td><span class="unk">unknown</span></td><td class="note">Top 50 South Korea #1</td></tr>
+<tr><td class="rank">2</td><td class="artist">RESCENE<span class="song">With</span></td><td><span class="badge-down">▼ 1</span></td><td class="num">1</td><td class="num">2</td><td class="heat"><b>58.4</b></td><td><span class="unk">unknown</span></td><td><span class="num">1,258,116</span></td><td class="note">Top 50 South Korea #2</td></tr>
+<tr><td class="rank">3</td><td class="artist">ILLIT<span class="song">You&#x27;re Under Arrest</span></td><td><span class="badge-up">▲ 19</span></td><td class="num">3</td><td class="num">2</td><td class="heat"><b>88.0</b></td><td><span class="unk">unknown</span></td><td><span class="num">8,459,297</span></td><td class="note">Top 50 South Korea #3</td></tr>
+<tr><td class="rank">4</td><td class="artist">머무르<span class="song">The Adult I Dreamed Of</span></td><td><span class="badge-up">▲ 5</span></td><td class="num">4</td><td class="num">2</td><td class="heat"><b>75.2</b></td><td><span class="unk">unknown</span></td><td><span class="unk">unknown</span></td><td class="note">Top 50 South Korea #5 · Korean indie act</td></tr>
+<tr><td class="rank">5</td><td class="artist">BESTie<span class="song">Love Options</span></td><td><span class="badge-up">▲ 12</span></td><td class="num">5</td><td class="num">2</td><td class="heat"><b>73.6</b></td><td><span class="unk">unknown</span></td><td><span class="unk">unknown</span></td><td class="note">Top 50 South Korea #6 · Disbanded group</td></tr>
+<tr><td class="rank">6</td><td class="artist">Jimin<span class="song">Who</span></td><td><span class="badge-down">▼ 3</span></td><td class="num">3</td><td class="num">2</td><td class="heat"><b>32.0</b></td><td><span class="unk">unknown</span></td><td><span class="num">60,712,053</span></td><td class="note">Top 50 South Korea #7</td></tr>
+<tr><td class="rank">7</td><td class="artist">IVE<span class="song">Looks Can Kill</span></td><td><span class="badge-new">NEW</span></td><td class="num">7</td><td class="num">1</td><td class="heat"><b>30.4</b></td><td><span class="unk">unknown</span></td><td><span class="num">6,993,526</span></td><td class="note">Top 50 South Korea #9</td></tr>
+<tr><td class="rank">8</td><td class="artist">CORTIS<span class="song">REDRED</span></td><td><span class="badge-down">▼ 2</span></td><td class="num">6</td><td class="num">2</td><td class="heat"><b>28.8</b></td><td><span class="unk">unknown</span></td><td><span class="unk">unknown</span></td><td class="note">Top 50 South Korea #10</td></tr>
+<tr><td class="rank">9</td><td class="artist">Redoor<span class="song">Forever Has Always Been</span></td><td><span class="badge-down">▼ 1</span></td><td class="num">8</td><td class="num">2</td><td class="heat"><b>27.2</b></td><td><span class="unk">unknown</span></td><td><span class="unk">unknown</span></td><td class="note">Top 50 South Korea #11 · Korean indie band</td></tr>
+<tr><td class="rank">10</td><td class="artist">SOYEON<span class="song">I&#x27;m gonna TOESA (feat. Kian84)</span></td><td><span class="badge-down">▼ 6</span></td><td class="num">4</td><td class="num">2</td><td class="heat"><b>25.6</b></td><td><span class="unk">unknown</span></td><td><span class="num">5,066,878</span></td><td class="note">Top 50 South Korea #12</td></tr>
+<tr><td class="rank">11</td><td class="artist">Nerd Connection<span class="song">If I have you only</span></td><td><span class="badge-up">▲ 3</span></td><td class="num">11</td><td class="num">2</td><td class="heat"><b>54.0</b></td><td><span class="unk">unknown</span></td><td><span class="unk">unknown</span></td><td class="note">Top 50 South Korea #13 · Korean band</td></tr>
+<tr><td class="rank">12</td><td class="artist">Panda Gomm<span class="song">화 (with YANGHONGWON)</span></td><td><span class="badge-new">NEW</span></td><td class="num">12</td><td class="num">1</td><td class="heat"><b>22.4</b></td><td><span class="unk">unknown</span></td><td><span class="unk">unknown</span></td><td class="note">Top 50 South Korea #15 · Korean hip-hop duo</td></tr>
+<tr><td class="rank">13</td><td class="artist">ATEEZ<span class="song">BAD</span></td><td><span class="badge-down">▼ 2</span></td><td class="num">11</td><td class="num">2</td><td class="heat"><b>26.8</b></td><td><span class="unk">unknown</span></td><td><span class="num">12,096,318</span></td><td class="note">Top 50 South Korea #16</td></tr>
+<tr><td class="rank">14</td><td class="artist">HANRORO<span class="song">0+0</span></td><td><span class="badge-down">▼ 4</span></td><td class="num">10</td><td class="num">2</td><td class="heat"><b>19.2</b></td><td><span class="unk">unknown</span></td><td><span class="unk">unknown</span></td><td class="note">Top 50 South Korea #17 · Korean indie act</td></tr>
+<tr><td class="rank">15</td><td class="artist">AKMU<span class="song">How can I love the heartbreak, you&#x27;re the one I love</span></td><td><span class="badge-new">NEW</span></td><td class="num">15</td><td class="num">1</td><td class="heat"><b>17.6</b></td><td><span class="unk">unknown</span></td><td><span class="num">670,026</span></td><td class="note">Top 50 South Korea #20</td></tr>
+<tr><td class="rank">16</td><td class="artist">Choi Yu Ree<span class="song">When I stop thinking</span></td><td><span class="badge-new">NEW</span></td><td class="num">16</td><td class="num">1</td><td class="heat"><b>16.0</b></td><td><span class="unk">unknown</span></td><td><span class="unk">unknown</span></td><td class="note">Top 50 South Korea #21</td></tr>
+<tr><td class="rank">17</td><td class="artist">Crush<span class="song">seesaw (feat. IU)</span></td><td><span class="badge-new">NEW</span></td><td class="num">17</td><td class="num">1</td><td class="heat"><b>14.4</b></td><td><span class="unk">unknown</span></td><td><span class="num">2,687,955</span></td><td class="note">Top 50 South Korea #22</td></tr>
+<tr><td class="rank">18</td><td class="artist">Hearts2Hearts<span class="song">RUDE!</span></td><td><span class="badge-down">▼ 2</span></td><td class="num">16</td><td class="num">2</td><td class="heat"><b>20.3</b></td><td><span class="unk">unknown</span></td><td><span class="num">6,032,750</span></td><td class="note">Top 50 South Korea #23</td></tr>
+<tr><td class="rank">19</td><td class="artist">aespa<span class="song">LEMONADE</span></td><td><span class="badge-down">▼ 4</span></td><td class="num">15</td><td class="num">2</td><td class="heat"><b>11.2</b></td><td><span class="unk">unknown</span></td><td><span class="num">16,977,936</span></td><td class="note">Top 50 South Korea #24</td></tr>
+<tr><td class="rank">20</td><td class="artist">WOODZ<span class="song">Drowning</span></td><td><span class="badge-up">▲ 1</span></td><td class="num">20</td><td class="num">2</td><td class="heat"><b>19.6</b></td><td><span class="unk">unknown</span></td><td><span class="unk">unknown</span></td><td class="note">Top 50 South Korea #30</td></tr>
+<tr><td class="rank">21</td><td class="artist">KiiiKiii<span class="song">Pop Off Pop Off</span></td><td><span class="badge-down">▼ 2</span></td><td class="num">19</td><td class="num">2</td><td class="heat"><b>8.0</b></td><td><span class="unk">unknown</span></td><td><span class="unk">unknown</span></td><td class="note">Top 50 South Korea #31</td></tr>
+<tr><td class="rank">22</td><td class="artist">JANNABI<span class="song">for lovers who hesitate</span></td><td><span class="badge-down">▼ 4</span></td><td class="num">18</td><td class="num">2</td><td class="heat"><b>6.4</b></td><td><span class="unk">unknown</span></td><td><span class="unk">unknown</span></td><td class="note">Top 50 South Korea #33 · Korean band</td></tr>
+<tr><td class="rank">23</td><td class="artist">BIG Naughty<span class="song">Nostalgia</span></td><td><span class="badge-down">▼ 3</span></td><td class="num">20</td><td class="num">2</td><td class="heat"><b>4.8</b></td><td><span class="unk">unknown</span></td><td><span class="unk">unknown</span></td><td class="note">Top 50 South Korea #35</td></tr>
+<tr><td class="rank">24</td><td class="artist">PLAVE<span class="song">Star Trace</span></td><td><span class="badge-down">▼ 17</span></td><td class="num">7</td><td class="num">2</td><td class="heat"><b>4.1</b></td><td><span class="unk">unknown</span></td><td><span class="num">752,904</span></td><td class="note">Top 50 South Korea #36</td></tr>
+<tr><td class="rank">25</td><td class="artist">The Black Skirts<span class="song">Ling Ling</span></td><td><span class="badge-flat">—</span></td><td class="num">25</td><td class="num">2</td><td class="heat"><b>1.6</b></td><td><span class="unk">unknown</span></td><td><span class="unk">unknown</span></td><td class="note">Top 50 South Korea #38 · Korean indie act</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+
+  <section class="explainer">
+    <h2>🔮 NEXT WEEK FORECAST — MACHINE LEARNING</h2>
+    <p>New in Week 2: Heat Check now runs a <b>machine-learning model</b> that reads each artist&rsquo;s chart rank and audience size and estimates the chance they make a <b>big climb (4+ spots)</b> in the next edition. These are its top calls:</p>
+    <div class="fc-grid">
+      <div class="fc-col"><h3>HIP-HOP — MOST LIKELY TO CLIMB</h3>
+<div class="fc-pick"><div class="who"><b>Beyoncé</b> <span style="display:inline;color:var(--muted);font-size:12.5px;">now #22</span><span>Low chart rank + the biggest audience in music = maximum room to run.</span></div><div class="prob">49%</div></div>
+<div class="fc-pick"><div class="who"><b>SZA</b> <span style="display:inline;color:var(--muted);font-size:12.5px;">now #23</span><span>Debuts low with a major audience behind the GTA VI score track.</span></div><div class="prob">42%</div></div>
+<div class="fc-pick"><div class="who"><b>Loe Shimmy</b> <span style="display:inline;color:var(--muted);font-size:12.5px;">now #25</span><span>Sitting last with a Drake co-sign still working for him.</span></div><div class="prob">34%</div></div>
+<div class="fc-pick"><div class="who"><b>Burna Boy</b> <span style="display:inline;color:var(--muted);font-size:12.5px;">now #20</span><span>An Afrobeats giant parked at #20 — he rarely stays there.</span></div><div class="prob">31%</div></div>
+<div class="fc-pick"><div class="who"><b>Cardi B</b> <span style="display:inline;color:var(--muted);font-size:12.5px;">now #16</span><span>The chart&rsquo;s second-biggest audience, stuck mid-table.</span></div><div class="prob">27%</div></div>
+      </div>
+      <div class="fc-col"><h3>K-POP — MOST LIKELY TO CLIMB</h3>
+<div class="fc-pick"><div class="who"><b>PLAVE</b> <span style="display:inline;color:var(--muted);font-size:12.5px;">now #24</span><span>Fell 17 spots this edition — the model bets on the snap-back.</span></div><div class="prob">32%</div></div>
+<div class="fc-pick"><div class="who"><b>aespa</b> <span style="display:inline;color:var(--muted);font-size:12.5px;">now #19</span><span>Top-tier audience, uncharacteristically low rank.</span></div><div class="prob">28%</div></div>
+<div class="fc-pick"><div class="who"><b>Hearts2Hearts</b> <span style="display:inline;color:var(--muted);font-size:12.5px;">now #18</span><span>Audience still growing (+1.9%) with open road above them.</span></div><div class="prob">22%</div></div>
+<div class="fc-pick"><div class="who"><b>Crush</b> <span style="display:inline;color:var(--muted);font-size:12.5px;">now #17</span><span>New entry riding an IU feature that keeps pulling streams.</span></div><div class="prob">18%</div></div>
+<div class="fc-pick"><div class="who"><b>ATEEZ</b> <span style="display:inline;color:var(--muted);font-size:12.5px;">now #13</span><span>A big, loyal audience — mid-chart is below their ceiling.</span></div><div class="prob">14%</div></div>
+      </div>
+    </div>
+    <div class="formula">
+      <b>How honest is this model?</b> It is a logistic-regression model (v1) trained on the 33 chart artists whose Week 1 &rarr; Week 2 moves we could measure — the only history this young chart has. On that training data it scores 84.8%, which is exactly what you would get by guessing &ldquo;no big climb&rdquo; for everyone. So read these as <b>informed hunches, not gospel</b>: the pattern it leans on is real (artists sitting low with big audiences have the most room to jump), but one chart transition is not much to learn from. It retrains every edition, and its calls get graded in public — hits and misses — starting in Week 3. <b>Track record: 0 graded calls (first forecasts).</b>
+    </div>
+  </section>
+
+  <section class="explainer">
+    <h2>WHAT IS THE HEAT INDEX?</h2>
+    <p>Billboard ranks who&rsquo;s biggest. The <b>Heat Index (0–100)</b> ranks who&rsquo;s <b>moving fastest</b>. It has three parts:</p>
+    <ul>
+      <li><b>Chart position — up to 40 points.</b> The higher you rank, the more points. #1 earns 40; #25 earns about 2.</li>
+      <li><b>Movement — up to 40 points.</b> Every spot you climb earns 10 points. Climb 4 or more spots and you max out at 40. Falling earns no momentum points.</li>
+      <li><b>Follower growth — up to 20 points.</b> Grow your followers 5% or more in a week and you max out at 20.</li>
+    </ul>
+    <div class="formula">
+      <b>Formula:</b> Heat Index = Chart position score (26 − Rank) ÷ 25 × 40 &nbsp;+&nbsp; Momentum score (spots gained × 10, capped at 40) &nbsp;+&nbsp; Follower growth score (week-over-week follower growth % × 4, capped at 20). Total is capped at 100 and floored at 0.
+    </div>
+    <p style="margin-top:14px;"><b>The Heat Index is live.</b> Week 2 scores are real — ILLIT&rsquo;s 88.0 is the highest on either chart. One quirk of this edition: follower growth is measured against the Week 1 snapshot (Oct 14, 2026), a 30-day span, because this chart&rsquo;s second edition took longer to land than planned. New entries earn position and growth points but no momentum points — they have not climbed yet. The <b>Biggest Mover</b> crown goes to the highest Heat Index on each chart.</p>
+  </section>
+
+  <section class="method">
+    <h2>HOW THIS CHART IS BUILT</h2>
+    <p><b>Week 2.</b> Charts fetched Nov 13, 2026 and compared against the Week 1 snapshot (Oct 14, 2026). Movement shows spots gained or lost vs. Week 1; Peaks carry across editions; Weeks counts editions charted. Artists who fell out of the Top 25 are out of this edition.</p>
+    <p><b>Hip-Hop source.</b> The official Billboard Hot 100 playlist on Spotify (fetched Nov 13, 2026), filtered to hip-hop, R&amp;B &amp; Afrobeats acts — lead and featured artists both count, one entry per artist at their highest-charting song. Note the Halloween effect: Michael Jackson&rsquo;s &ldquo;Thriller&rdquo; (playlist #20) and Rockwell&rsquo;s &ldquo;Somebody&rsquo;s Watching Me&rdquo; (playlist #39) re-chart on seasonal streams and are counted as R&amp;B catalog entries.</p>
+    <p><b>K-Pop source.</b> Spotify Top 50 — South Korea (fetched Nov 13, 2026), Korean acts in chart order, one entry per artist at their highest-charting song. The one non-Korean act in the Top 50, Post Malone &amp; Swae Lee&rsquo;s &ldquo;Sunflower&rdquo; (#49), was skipped. RESCENE holds four songs in the Top 50; their entry rides their highest, &ldquo;With&rdquo; at #2.</p>
+    <p><b>Followers.</b> Spotify follower counts remain unknown for all 50 artists — Spotify&rsquo;s tools expose monthly listeners, not followers, so nothing is guessed. Instagram counts come from Instagram&rsquo;s own system (Nov 13, 2026) and were accepted only where the profile was verified and clearly matched the artist. Two changes this edition: Jimin&rsquo;s count is published for the first time (his verified account is active; with no Week 1 baseline, his growth score is 0 this edition), and CORTIS shows unknown because their count could not be re-verified this edition — a stale number was not carried over. Where a growth score could not be computed, it counts as 0 in the Heat Index.</p>
+    <p><b>Forecast.</b> The Next Week Forecast comes from a logistic-regression model trained only on this chart&rsquo;s own history — no outside data is fed to it. Its limits and track record are printed in the forecast section, where they can be checked.</p>
+    <p><b>Verification.</b> Playlist fetches were run twice and agreed. No number on this page is guessed.</p>
+  </section>
+
+  <!-- AD SLOT 3 — above footer. Paste AdSense ad-unit code inside the div after approval. -->
+  <div class="ad-slot"></div>
+  <!-- END AD SLOT 3 -->
+
+  <footer>HEAT CHECK · The Momentum Chart · Week 2 · Data as of November 13, 2026 · Not affiliated with Billboard or Spotify.<br><a href="/about.html">About</a> · <a href="/contact.html">Contact</a> · <a href="/privacy.html">Privacy Policy</a></footer>
+</div>
+</body>
+</html>
+
+<!-- heat-check: content-type fix -->
