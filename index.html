@@ -151,9 +151,33 @@
   .fc-pick .prob { font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: var(--gold); white-space: nowrap; padding-left: 12px; }
   /* Ad slots: invisible until an ad code is pasted inside the .ad-slot div. */
   .ad-slot { display: block; margin: 28px auto; text-align: center; }
+
+  .ticker { position: sticky; top: 0; z-index: 60; display: flex; align-items: stretch; background: #0d050a; border-bottom: 2px solid var(--gold); overflow: hidden; }
+  .tk-label { flex: 0 0 auto; display: flex; align-items: center; padding: 8px 14px; background: var(--gold); color: #160a12; font-family: 'Bebas Neue', sans-serif; letter-spacing: 2px; font-size: 17px; white-space: nowrap; }
+  .tk-view { flex: 1 1 auto; overflow: hidden; display: flex; align-items: center; }
+  .tk-track { display: flex; width: max-content; animation: tk-scroll 30s linear infinite; }
+  .ticker:hover .tk-track { animation-play-state: paused; }
+  .tk-set { display: flex; align-items: center; white-space: nowrap; }
+  .tk-item { padding: 0 10px; font-size: 14px; font-weight: 600; letter-spacing: .4px; }
+  .tk-item b { color: #fff; }
+  .tk-heat { color: var(--gold); font-weight: 800; }
+  .tk-up { color: #37e08b; font-weight: 700; }
+  .tk-dn { color: var(--magenta-soft); font-weight: 700; }
+  .tk-chart { color: var(--muted); font-weight: 500; font-size: 12.5px; }
+  .tk-sep { color: var(--magenta); }
+  @keyframes tk-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .tk-track { animation: none; } }
+  @media (max-width: 560px) { .tk-label { font-size: 14px; padding: 7px 10px; } .tk-item { font-size: 13px; } }
 </style>
 </head>
 <body>
+<div class="ticker" aria-label="Top 5 artists by Heat Index this week">
+  <div class="tk-label">🔥 TOP 5 · HEAT INDEX</div>
+  <div class="tk-view"><div class="tk-track">
+    <div class="tk-set"><span class="tk-item"><b>1. ILLIT</b> HEAT INDEX <span class="tk-heat">88.0</span> <span class="tk-up">▲19</span> <span class="tk-chart">K-POP #3</span></span><span class="tk-sep">⚡</span><span class="tk-item"><b>2. A2O</b> HEAT INDEX <span class="tk-heat">80.0</span> <span class="tk-up">▲11</span> <span class="tk-chart">K-POP #1</span></span><span class="tk-sep">⚡</span><span class="tk-item"><b>3. 머무르</b> HEAT INDEX <span class="tk-heat">75.2</span> <span class="tk-up">▲5</span> <span class="tk-chart">K-POP #4</span></span><span class="tk-sep">⚡</span><span class="tk-item"><b>4. BESTie</b> HEAT INDEX <span class="tk-heat">73.6</span> <span class="tk-up">▲12</span> <span class="tk-chart">K-POP #5</span></span><span class="tk-sep">⚡</span><span class="tk-item"><b>5. Jhené Aiko</b> HEAT INDEX <span class="tk-heat">67.2</span> <span class="tk-up">▲4</span> <span class="tk-chart">HIP-HOP #9</span></span><span class="tk-sep">⚡</span></div>
+    <div class="tk-set" aria-hidden="true"><span class="tk-item"><b>1. ILLIT</b> HEAT INDEX <span class="tk-heat">88.0</span> <span class="tk-up">▲19</span> <span class="tk-chart">K-POP #3</span></span><span class="tk-sep">⚡</span><span class="tk-item"><b>2. A2O</b> HEAT INDEX <span class="tk-heat">80.0</span> <span class="tk-up">▲11</span> <span class="tk-chart">K-POP #1</span></span><span class="tk-sep">⚡</span><span class="tk-item"><b>3. 머무르</b> HEAT INDEX <span class="tk-heat">75.2</span> <span class="tk-up">▲5</span> <span class="tk-chart">K-POP #4</span></span><span class="tk-sep">⚡</span><span class="tk-item"><b>4. BESTie</b> HEAT INDEX <span class="tk-heat">73.6</span> <span class="tk-up">▲12</span> <span class="tk-chart">K-POP #5</span></span><span class="tk-sep">⚡</span><span class="tk-item"><b>5. Jhené Aiko</b> HEAT INDEX <span class="tk-heat">67.2</span> <span class="tk-up">▲4</span> <span class="tk-chart">HIP-HOP #9</span></span><span class="tk-sep">⚡</span></div>
+  </div></div>
+</div>
 <header class="hero">
   <div class="flame">🔥</div>
   <h1 class="logo"><span class="h">HEAT</span> <span class="c">CHECK</span></h1>
